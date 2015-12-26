@@ -12,7 +12,9 @@
 </head>
 <body>
 	{% include "navbar.html" %}
-	{% block content %}{% endblock %}
+	<div class="container-fluid">
+		{% block content %}{% endblock %}
+	</div>
 	{% include "footer.html" %}
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
