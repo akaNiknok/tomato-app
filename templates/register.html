@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+	<form method="POST" role="form">
+		<div class="form-group">
+			<label for="user">User Name:</label>
+			<input type="text" class="form-control" name="user">
+		</div>
+		<div class="form-group">
+			<label for="email">Email address:</label>
+			<input type="email" class="form-control" name="email">
+		</div>
+		<div class="form-group">
+			<label for="pwd">Password:</label>
+			<input type="password" class="form-control" name="pwd">
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+	<p>Already registered? <a href="/login">Login Now!</a></p>
+{% endblock %}
