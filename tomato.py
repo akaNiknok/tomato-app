@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, session, redirect
+import sqlite3
 
 app = Flask(__name__)
 
@@ -21,7 +22,15 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        pass
+        form = request.form
+
+        db = sqlite3.connect("database.db")
+        cursor = db.cursor()
+        cursor.execute("INSERT INTO users(name, email, password) VALUES(?,?,?)", (form["user"], form["email"], form["pwd"]))
+        db.commit()
+        db.close()
+
+        return redirect("/")
     return render_template("register.html")
 
 if __name__=="__main__":
