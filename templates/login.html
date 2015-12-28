@@ -15,5 +15,8 @@
 		</div>
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
+	{% if error %}
+		<p>Incorrect username or password!</p>
+	{% endif %}
 	<p>Not registered yet? <a href="/register">Register Now!</a></p>
 {% endblock %}
