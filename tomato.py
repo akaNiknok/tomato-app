@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, url_for, session, redirect, make_response
 import sqlite3
+import os
 
 app = Flask(__name__)
 
@@ -7,7 +8,10 @@ app = Flask(__name__)
 def index():
     if request.method == "POST":
         return redirect("/" + request.form["country"])
-    return render_template("index.html", user=request.cookies.get("username"))
+    if "username" in session:
+        return render_template("index.html", user=session["username"])
+    else:
+        return render_template("index.html")
 
 @app.route("/<country>")
 def country(country):
@@ -32,18 +36,18 @@ def login():
             db.close()
             return render_template("login.html", error=True)
 
-        # Else, set the cookie
-        resp = make_response(redirect("/"))
-        resp.set_cookie("username", form["user"])
+        # Else, set `username` in `session` to the `user`
+        session['username'] = form["user"]
 
         db.close()  # Close the connection
-        return resp
+        return redirect("/")
 
     return render_template("login.html")
 
 @app.route("/logout")
 def logout():
-    pass
+    session.pop('username', None)
+    return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -64,6 +68,9 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
+
+# Set the super duper secret-ish key :P
+app.secret_key = os.urandom(24)
 
 if __name__=="__main__":
     app.run(debug=True)
