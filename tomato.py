@@ -32,7 +32,11 @@ def login():
 
         # Check if the password is correct
         # If incorrect, throw an error
-        if cursor.fetchone()[0] != form["pwd"]:
+        try:
+            if cursor.fetchone()[0] != form["pwd"]:
+                db.close()
+                return render_template("login.html", error=True)
+        except TypeError:  # Throws a TypeError if the user is not yet registered
             db.close()
             return render_template("login.html", error=True)
 
