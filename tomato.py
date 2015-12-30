@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, url_for, session, redirect, make_response
 import sqlite3
-import os
+from os import urandom, path
+
+ROOT = path.dirname(path.realpath(__file__))
 
 app = Flask(__name__)
 
@@ -24,8 +26,10 @@ def login():
     if request.method == "POST":
         form = request.form
 
-        db = sqlite3.connect("database.db")  # Connect to the database
-        cursor = db.cursor()                 # Create a cursor
+        # Connect to the database
+        db = sqlite3.connect(path.join(ROOT, "database.db"))
+        # Create a cursor
+        cursor = db.cursor()
 
         # Get the users password from the `users` table
         cursor.execute("SELECT password FROM users WHERE name=?", (form["user"],))
@@ -60,8 +64,10 @@ def register():
     if request.method == "POST":
         form = request.form
 
-        db = sqlite3.connect("database.db")  # Connect to the database
-        cursor = db.cursor()                 # Create a cursor
+        # Connect to the database
+        db = sqlite3.connect(path.join(ROOT, "database.db"))
+        # Create a cursor
+        cursor = db.cursor()
 
         # Add the information to the `users` table
         cursor.execute("INSERT INTO users(name, email, password) VALUES(?,?,?)", (form["user"], form["email"], form["pwd"]))
@@ -74,7 +80,7 @@ def register():
     return render_template("register.html")
 
 # Set the super duper secret-ish key :P
-app.secret_key = os.urandom(24)
+app.secret_key = urandom(24)
 
 if __name__=="__main__":
     app.run(debug=True)
